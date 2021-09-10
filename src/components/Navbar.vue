@@ -2,6 +2,12 @@
   <nav>
     <v-app-bar app color="black" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-spacer></v-spacer>
+      <v-switch
+        class="mt-5"
+        v-model="$vuetify.theme.dark"
+        color="red"
+      ></v-switch>
     </v-app-bar>
     <v-navigation-drawer app color="black" dark v-model="drawer">
       <v-list-item>
@@ -72,7 +78,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
-      drawer: false,
+      drawer: true,
       items: [
         { title: "Έλεγχοι", icon: "mdi-file-plus", route: "/inspections" },
         { title: "Αναζήτηση", icon: "mdi-magnify", route: "/search" },
