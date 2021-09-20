@@ -9,6 +9,7 @@
         color="red"
       ></v-switch>
     </v-app-bar>
+
     <v-navigation-drawer app color="black" dark v-model="drawer">
       <v-list-item>
         <v-list-item-content class="text-center">
@@ -73,31 +74,31 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+  import { mapActions, mapState } from "vuex";
 
-export default {
-  data() {
-    return {
-      drawer: true,
-      items: [
-        { title: "Έλεγχοι", icon: "mdi-file-plus", route: "/inspections" },
-        { title: "Αναζήτηση", icon: "mdi-magnify", route: "/search" },
-      ],
-    };
-  },
-  computed: { ...mapState("auth", ["token"]) },
-  methods: {
-    ...mapActions("auth", ["signOut"]),
-    logout() {
-      this.signOut().then(() => {
-        this.$router.replace({
-          name: "login",
-        });
-      });
-      localStorage.removeItem("credentials");
+  export default {
+    data() {
+      return {
+        drawer: false,
+        items: [
+          { title: "Έλεγχοι", icon: "mdi-file", route: "/inspections" },
+          { title: "Αναζήτηση", icon: "mdi-magnify", route: "/search" },
+        ],
+      };
     },
-  },
-};
+    computed: { ...mapState("auth", ["token"]) },
+    methods: {
+      ...mapActions("auth", ["signOut"]),
+      logout() {
+        this.signOut().then(() => {
+          this.$router.replace({
+            name: "login",
+          });
+        });
+        localStorage.removeItem("credentials");
+      },
+    },
+  };
 </script>
 
 <style></style>

@@ -9,8 +9,8 @@ export default {
       headers: authHeader(),
     });
   },
-  getAllPaginated(page) {
-    return http.get(`${END_POINT}completed/?page=${page}`, {
+  getAllPaginated(page, query) {
+    return http.get(`${END_POINT}completed/?page=${page}&search=${query}`, {
       headers: authHeader(),
     });
   },

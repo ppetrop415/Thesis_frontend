@@ -5,11 +5,11 @@
       <v-container fluid>
         <v-row class="mx-2 mt-2">
           <v-col cols="9">
-            <v-form @submit.prevent="handleSearch">
+            <v-form @submit.prevent="getLoads">
               <v-text-field
                 label="Αναζήτηση με ΑΦΜ"
                 prepend-inner-icon="mdi-magnify"
-                v-model="vat"
+                v-model="query"
                 rounded
                 outlined
               ></v-text-field>
@@ -57,11 +57,11 @@
                   mdi-eye
                 </v-icon>
               </v-btn>
-              <v-btn class="my-2 mr-2" fab dark small color="error">
+              <!-- <v-btn class="my-2 mr-2" fab dark small color="error">
                 <v-icon>
                   mdi-file-pdf
                 </v-icon>
-              </v-btn>
+              </v-btn> -->
             </template>
           </v-data-table>
           <hr />
@@ -71,7 +71,7 @@
               :length="Math.ceil(inspections.count / 10)"
               total-visible="7"
               circle
-              @input="handlePageChange"
+              @input="getLoads"
             ></v-pagination>
           </div>
         </v-card>
@@ -82,109 +82,108 @@
 </template>
 
 <script>
-import Footer from "@/components/Footer.vue";
-import Navbar from "@/components/Navbar.vue";
+  import Footer from "@/components/Footer.vue";
+  import Navbar from "@/components/Navbar.vue";
 
-import { mapState, mapActions } from "vuex";
+  import http from "../api/axios";
 
-export default {
-  name: "Inspections",
-  components: { Navbar, Footer },
-  data() {
-    return {
-      vat: null,
-      loading: false,
-      selectedItemIndex: -1,
-      page: 1,
-      headers: [
-        {
-          text: "Επωνυμία",
-          align: "start",
-          sortable: false,
-          value: "inspection.branch_store.business",
-          class: "error white--text text-subtitle-1",
-        },
-        {
-          text: "ΑΦΜ",
-          value: "inspection.branch_store.vat",
-          class: "error white--text text-subtitle-1",
-        },
-        {
-          text: "Βαθμολογία",
-          value: "score",
-          class: "error white--text text-subtitle-1",
-        },
+  import { mapState } from "vuex";
 
-        {
-          text: "Ημερομηνία",
-          value: "completed",
-          class: "error white--text text-subtitle-1",
-        },
-        {
-          text: "Ενέργειες",
-          value: "actions",
-          sortable: false,
-          class: "error white--text text-subtitle-1",
-        },
-      ],
-    };
-  },
-  computed: {
-    ...mapState("inspection", ["inspections"]),
-    ...mapState("auth", ["token"]),
-  },
-  created() {
-    this.getInspectionsPaginated(this.page);
-  },
-  methods: {
-    ...mapActions("auth", ["getInspections"]),
-    ...mapActions("inspection", [
-      "getInspectionsPaginated",
-      "searchInspection",
-    ]),
-    handlePageChange(value) {
-      this.page = value;
-      this.loading = true;
-      this.getInspectionsPaginated(this.page).then(() => {
-        this.loading = false;
-      });
+  export default {
+    name: "Inspections",
+    components: { Navbar, Footer },
+    data() {
+      return {
+        query: "",
+        loading: false,
+        inspections: [],
+        selectedItemIndex: -1,
+        page: 1,
+        headers: [
+          {
+            text: "Επωνυμία",
+            align: "start",
+            sortable: false,
+            value: "inspection.branch_store.business",
+            class: "error white--text text-subtitle-1",
+          },
+          {
+            text: "ΑΦΜ",
+            value: "inspection.branch_store.vat",
+            class: "error white--text text-subtitle-1",
+          },
+          {
+            text: "Βαθμολογία",
+            value: "score",
+            class: "error white--text text-subtitle-1",
+          },
+
+          {
+            text: "Ημερομηνία",
+            value: "completed",
+            class: "error white--text text-subtitle-1",
+          },
+          {
+            text: "Ενέργειες",
+            value: "actions",
+            sortable: false,
+            class: "error white--text text-subtitle-1",
+          },
+        ],
+      };
     },
-    startNewInspection() {
-      this.$router.push({
-        name: "new-inspection",
-      });
+    computed: {
+      // ...mapState("inspection", ["inspections"]),
+      ...mapState("auth", ["token"]),
     },
+    created() {
+      // this.getInspectionsPaginated(this.page);
+      this.getLoads();
+    },
+    methods: {
+      pageCount() {
+        Math.ceil(this.inspections.count / 10);
+      },
 
-    handleSearch() {
-      if (this.vat !== null) {
+      async getLoads() {
         this.loading = true;
-        this.searchInspection(this.vat).then(() => {
-          this.loading = false;
+
+        await http
+          .get(`inspections/completed/?page=${this.page}&search=${this.query}`)
+          .then((response) => {
+            this.inspections = response.data;
+
+            console.log(response.data);
+
+            this.loading = false;
+          });
+      },
+
+      startNewInspection() {
+        this.$router.push({
+          name: "new-inspection",
         });
-      } else {
-        console.log("add a number");
-      }
-    },
+      },
 
-    getColor(score) {
-      if (score) {
-        if (score > 100) return "red";
-        else if (score > 40) return "orange";
-        else return "green";
-      }
-    },
+      getColor(score) {
+        if (score) {
+          if (score > 100) return "red";
+          else if (score > 40) return "orange";
+          else return "green";
+        }
+      },
 
-    viewInspection(item) {
-      this.selectedItem = this.inspections.results.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.$router.push({
-        name: "inspection-detail",
-        params: {
-          item: this.editedItem,
-          uuid: this.editedItem.inspection.uuid,
-        },
-      });
+      viewInspection(item) {
+        this.selectedItem = this.inspections.results.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.$router.push({
+          name: "inspection-detail",
+          params: {
+            item: this.editedItem,
+            uuid: this.editedItem.inspection.uuid,
+          },
+        });
+      },
     },
-  },
-};
+  };
 </script>

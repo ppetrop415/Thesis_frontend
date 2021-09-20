@@ -90,13 +90,13 @@
                   σε αυτή την επιχείρηση
                 </v-card-text>
                 <v-card-actions>
+                  <v-spacer></v-spacer>
                   <v-btn color="blue" text @click="dialog = false">
                     Disagree
                   </v-btn>
-                  <v-spacer></v-spacer>
+
                   <v-btn
                     color="error"
-                    text
                     @click="
                       (dialog = false), startInspection(selectedBranchstore)
                     "
@@ -115,55 +115,55 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import Footer from "../components/Footer.vue";
-import Navbar from "../components/Navbar.vue";
-export default {
-  components: { Navbar, Footer },
-  name: "NewInspection",
-  data() {
-    return {
-      vat: null,
-      dialog: false,
-      selectedBranchstore: "",
-    };
-  },
-  computed: {
-    ...mapState("branchstore", ["branchstore"]),
-    ...mapState("auth", ["token"]),
-  },
-  created() {
-    this.searchBranchstore();
-  },
-  methods: {
-    ...mapActions("branchstore", ["searchBranchstore"]),
-    ...mapActions("inspection", ["createInspection"]),
+  import { mapActions, mapState } from "vuex";
+  import Footer from "../components/Footer.vue";
+  import Navbar from "../components/Navbar.vue";
+  export default {
+    components: { Navbar, Footer },
+    name: "NewInspection",
+    data() {
+      return {
+        vat: null,
+        dialog: false,
+        selectedBranchstore: "",
+      };
+    },
+    computed: {
+      ...mapState("branchstore", ["branchstore"]),
+      ...mapState("auth", ["token"]),
+    },
+    created() {
+      this.searchBranchstore();
+    },
+    methods: {
+      ...mapActions("branchstore", ["searchBranchstore"]),
+      ...mapActions("inspection", ["createInspection"]),
 
-    handleSearch() {
-      if (this.vat !== null) {
-        this.searchBranchstore(this.vat);
-      } else {
-        console.log("add a number");
-      }
+      handleSearch() {
+        if (this.vat !== null) {
+          this.searchBranchstore(this.vat);
+        } else {
+          console.log("add a number");
+        }
+      },
+      sendData(item) {
+        this.selectedBranchstore = item;
+      },
+      startInspection() {
+        this.createInspection({
+          branch_store: this.selectedBranchstore.id,
+          inspector: this.token.user.id,
+        });
+        this.$router.push({
+          name: "inspection",
+          params: {
+            slug: this.selectedBranchstore.slug,
+            branchstore: this.selectedBranchstore,
+          },
+        });
+      },
     },
-    sendData(item) {
-      this.selectedBranchstore = item;
-    },
-    startInspection() {
-      this.createInspection({
-        branch_store: this.selectedBranchstore.id,
-        inspector: this.token.user.id,
-      });
-      this.$router.push({
-        name: "inspection",
-        params: {
-          slug: this.selectedBranchstore.slug,
-          branchstore: this.selectedBranchstore,
-        },
-      });
-    },
-  },
-};
+  };
 </script>
 
 <style></style>
