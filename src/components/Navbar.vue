@@ -1,13 +1,13 @@
 <template>
   <nav>
     <v-app-bar app color="black" dark>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <!-- <slot name="left_button" /> -->
+      <v-app-bar-nav-icon @click="drawer = !drawer"
+        ><slot name="left_button"
+      /></v-app-bar-nav-icon>
+      <slot name="title" />
       <v-spacer></v-spacer>
-      <v-switch
-        class="mt-5"
-        v-model="$vuetify.theme.dark"
-        color="red"
-      ></v-switch>
+      <slot name="right_button" />
     </v-app-bar>
 
     <v-navigation-drawer app color="black" dark v-model="drawer">
@@ -82,6 +82,11 @@
         drawer: false,
         items: [
           { title: "Έλεγχοι", icon: "mdi-file", route: "/inspections" },
+          {
+            title: "Νέος Έλεγχος",
+            icon: "mdi-file-plus",
+            route: "/new-inspection",
+          },
           { title: "Αναζήτηση", icon: "mdi-magnify", route: "/search" },
         ],
       };

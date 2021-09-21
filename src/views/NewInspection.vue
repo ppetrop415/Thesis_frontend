@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Navbar />
+    <navbar>
+      <template #title>Δημιουργία Ελέγχου</template>
+    </navbar>
     <v-main>
-      <v-container fluid class="mb-5">
-        <v-row class="mt-5" no-gutters justify="center">
-          <h1>Νέα Επιθεώρηση</h1>
-        </v-row>
-        <v-form class="mt-10" @submit.prevent="handleSearch">
+      <v-container class="mb-5">
+        <v-form @submit.prevent>
           <v-text-field
-            label="Τοποθέτησε το ΑΦΜ απο μια απόδειξη"
+            label="Τοποθέτησε το ΑΦΜ"
             prepend-inner-icon="mdi-magnify"
-            v-model="vat"
-            rounded
+            v-model="query"
+            dense
             outlined
+            @keyup.prevent="getLoads"
           ></v-text-field>
         </v-form>
 
@@ -115,6 +115,8 @@
 </template>
 
 <script>
+  import http from "../api/axios";
+
   import { mapActions, mapState } from "vuex";
   import Footer from "../components/Footer.vue";
   import Navbar from "../components/Navbar.vue";
@@ -123,21 +125,33 @@
     name: "NewInspection",
     data() {
       return {
-        vat: null,
+        query: "",
+        page: 1,
         dialog: false,
         selectedBranchstore: "",
+        branchstore: "",
       };
     },
     computed: {
-      ...mapState("branchstore", ["branchstore"]),
+      // ...mapState("branchstore", ["branchstore"]),
       ...mapState("auth", ["token"]),
     },
-    created() {
-      this.searchBranchstore();
-    },
+    // created() {
+    //   this.getLoads();
+    // },
     methods: {
       ...mapActions("branchstore", ["searchBranchstore"]),
       ...mapActions("inspection", ["createInspection"]),
+
+      async getLoads() {
+        await http
+          .get(`branchstores/?page=${this.page}&search=${this.query}`)
+          .then((response) => {
+            this.branchstore = response.data.results;
+
+            console.log(response.data);
+          });
+      },
 
       handleSearch() {
         if (this.vat !== null) {

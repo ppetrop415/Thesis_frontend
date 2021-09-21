@@ -1,80 +1,77 @@
 <template>
   <div>
-    <Navbar />
+    <navbar>
+      <template #title>Υγειονομικοί Έλεγχοι</template>
+    </navbar>
     <v-main class="mb-10">
-      <v-container fluid>
-        <v-row class="mx-2 mt-2">
-          <v-col cols="9">
-            <v-form @submit.prevent="getLoads">
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-form @submit.prevent>
               <v-text-field
+                class="mt-3"
                 label="Αναζήτηση με ΑΦΜ"
                 prepend-inner-icon="mdi-magnify"
                 v-model="query"
-                rounded
                 outlined
+                dense
+                @keyup="getLoads()"
               ></v-text-field>
             </v-form>
           </v-col>
-          <v-spacer></v-spacer>
-          <v-col class="text-end">
-            <v-btn
-              color="error"
-              class="white--text right"
-              fab
-              right
-              @click="startNewInspection()"
-              elevation="10"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-col>
         </v-row>
-        <v-card class="mb-10" elevation="15">
-          <v-data-table
-            :headers="headers"
-            :items="inspections.results"
-            disable-pagination
-            :hide-default-footer="true"
-            :loading="loading"
-            loading-text="Loading... Please wait"
-          >
-            <template v-slot:[`item.score`]="{ item }">
-              <v-chip :color="getColor(item.score)" dark>
-                {{ item.score }}
-              </v-chip>
-            </template>
+        <v-divider></v-divider>
+        <v-list two-line>
+          <v-list-item-group active-class="pink--text">
+            <template v-for="(item, index) in inspections.results">
+              <v-list-item @click="viewInspection(item)" :key="index">
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="item.inspection.branch_store.business"
+                  ></v-list-item-title>
 
-            <template v-slot:[`item.actions`]="{ item }">
-              <v-btn
-                class="my-2 mr-2"
-                fab
-                dark
-                small
-                color="primary"
-                @click="viewInspection(item)"
-              >
-                <v-icon>
-                  mdi-eye
-                </v-icon>
-              </v-btn>
-              <!-- <v-btn class="my-2 mr-2" fab dark small color="error">
-                <v-icon>
-                  mdi-file-pdf
-                </v-icon>
-              </v-btn> -->
+                  <v-list-item-subtitle
+                    class="text--primary"
+                    v-text="
+                      `${item.inspection.branch_store.health_regulator.first_name} ${item.inspection.branch_store.health_regulator.first_name}`
+                    "
+                  ></v-list-item-subtitle>
+
+                  <v-list-item-subtitle
+                    v-text="
+                      `${item.inspection.branch_store.address} ${item.inspection.branch_store.address_number}, ${item.inspection.branch_store.zip_code}, ${item.inspection.branch_store.state}`
+                    "
+                  ></v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-list-item-action-text
+                    v-text="item.completed"
+                  ></v-list-item-action-text>
+
+                  <v-list-item-action-text
+                    v-text="item.inspection.branch_store.vat"
+                  ></v-list-item-action-text>
+
+                  <v-chip :color="getColor(item.score)" dark>
+                    {{ item.score }}
+                  </v-chip>
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider :key="item.results"></v-divider>
             </template>
-          </v-data-table>
-          <hr />
-          <div class="text-center mt-2">
-            <v-pagination
-              v-model="page"
-              :length="Math.ceil(inspections.count / 10)"
-              total-visible="7"
-              circle
-              @input="getLoads"
-            ></v-pagination>
-          </div>
-        </v-card>
+          </v-list-item-group>
+        </v-list>
+
+        <div class="text-center my-3">
+          <v-pagination
+            v-model="page"
+            :length="Math.ceil(inspections.count / 10)"
+            total-visible="7"
+            circle
+            @input="getLoads"
+          ></v-pagination>
+        </div>
       </v-container>
     </v-main>
     <Footer />
@@ -99,37 +96,6 @@
         inspections: [],
         selectedItemIndex: -1,
         page: 1,
-        headers: [
-          {
-            text: "Επωνυμία",
-            align: "start",
-            sortable: false,
-            value: "inspection.branch_store.business",
-            class: "error white--text text-subtitle-1",
-          },
-          {
-            text: "ΑΦΜ",
-            value: "inspection.branch_store.vat",
-            class: "error white--text text-subtitle-1",
-          },
-          {
-            text: "Βαθμολογία",
-            value: "score",
-            class: "error white--text text-subtitle-1",
-          },
-
-          {
-            text: "Ημερομηνία",
-            value: "completed",
-            class: "error white--text text-subtitle-1",
-          },
-          {
-            text: "Ενέργειες",
-            value: "actions",
-            sortable: false,
-            class: "error white--text text-subtitle-1",
-          },
-        ],
       };
     },
     computed: {
@@ -141,10 +107,6 @@
       this.getLoads();
     },
     methods: {
-      pageCount() {
-        Math.ceil(this.inspections.count / 10);
-      },
-
       async getLoads() {
         this.loading = true;
 
@@ -157,12 +119,6 @@
 
             this.loading = false;
           });
-      },
-
-      startNewInspection() {
-        this.$router.push({
-          name: "new-inspection",
-        });
       },
 
       getColor(score) {

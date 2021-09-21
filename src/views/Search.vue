@@ -2,16 +2,16 @@
   ><div>
     <Navbar />
     <v-main class="mb-10">
-      <v-container fluid class="mb-5">
+      <v-container class="mb-5">
         <v-row class="mt-5" no-gutters justify="center">
-          <h1>Αναζήτηση Υγειονομικού Ελέγχου</h1>
+          <h1>Αναζήτηση Ελέγχου</h1>
         </v-row>
         <v-form class="mt-10" @submit.prevent="handleSearch">
           <v-text-field
             label="Τοποθέτησε το ΑΦΜ απο μια απόδειξη"
             prepend-inner-icon="mdi-magnify"
             v-model="vat"
-            rounded
+            dense
             outlined
           ></v-text-field>
         </v-form>
