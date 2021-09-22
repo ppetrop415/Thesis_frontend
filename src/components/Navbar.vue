@@ -13,12 +13,10 @@
     <v-navigation-drawer app color="black" dark v-model="drawer">
       <v-list-item>
         <v-list-item-content class="text-center">
-          <v-list-item-title class="title my-3">
-            Health <span class="blue--text">&</span> Safety
+          <v-list-item-title class="title">
+            <span class=" text-h4 font-weight-bold">S</span>any
+            <span class="red--text text-h4 font-weight-bold">H</span>ealth
           </v-list-item-title>
-          <v-list-item-subtitle class="mb-3">
-            Inspections
-          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -34,7 +32,7 @@
           </v-flex>
         </v-layout>
 
-        <v-list-item link>
+        <v-list-item link :to="{ name: 'profile' }">
           <v-list-item-content>
             <v-list-item-title class="title mb-3">
               {{ token.user.first_name }} <br />

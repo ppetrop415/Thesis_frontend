@@ -6,6 +6,7 @@ import NewInspection from "@/views/NewInspection.vue";
 import Inspection from "@/views/Inspection.vue";
 import InspectionDetail from "@/views/InspectionDetail.vue";
 import Search from "@/views/Search";
+import Profile from "@/views/Profile";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -96,6 +97,21 @@ const routes = [
     path: "/search",
     name: "search",
     component: Search,
+    // component: () =>
+    //   import(/* webpackChunkName: "inspections" */ "../views/Inspections.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "login",
+        });
+      }
+      next();
+    },
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
     // component: () =>
     //   import(/* webpackChunkName: "inspections" */ "../views/Inspections.vue"),
     beforeEnter: (to, from, next) => {

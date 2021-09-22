@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Navbar />
+    <navbar>
+      <template #left_button><btn-go-back /></template>
+      <template #title>Υγειονομικός Έλεγχος</template>
+    </navbar>
     <v-main class="mt-4 mb-10">
       <v-container fluid>
         <v-card elevation="10" class="mb-10 pa-3">
@@ -114,54 +117,55 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import Footer from "@/components/Footer.vue";
+  import { mapActions, mapState } from "vuex";
+  import Footer from "@/components/Footer.vue";
 
-import Navbar from "@/components/InspectionDetail/Navbar.vue";
-export default {
-  components: { Navbar, Footer },
-  props: ["uuid"],
-  name: "InspectionDetail",
-  data() {
-    return {
-      headers: [
-        {
-          text: "Ερώτηση",
-          align: "start",
-          sortable: false,
-          value: "question",
-          class: "error white--text text-h6",
-        },
-        {
-          text: "Αποτέλεσμα",
-          value: "body",
-          class: "error white--text text-h6",
-        },
-        {
-          text: "Σχόλια - Παρατηρήσεις",
-          value: "comment",
-          class: "error white--text text-h6",
-        },
-      ],
-    };
-  },
-  computed: {
-    ...mapState("inspection", ["inspection"]),
-  },
-  mounted() {
-    this.getInspection(this.uuid);
-  },
-  methods: {
-    ...mapActions("inspection", ["getInspection"]),
-    getColor(score) {
-      if (score) {
-        if (score > 100) return "red";
-        else if (score > 40) return "orange";
-        else return "green";
-      }
+  import Navbar from "@/components/Navbar.vue";
+  import BtnGoBack from "../components/btnGoBack.vue";
+  export default {
+    components: { Navbar, BtnGoBack, Footer },
+    props: ["uuid"],
+    name: "InspectionDetail",
+    data() {
+      return {
+        headers: [
+          {
+            text: "Ερώτηση",
+            align: "start",
+            sortable: false,
+            value: "question",
+            class: "error white--text text-h6",
+          },
+          {
+            text: "Αποτέλεσμα",
+            value: "body",
+            class: "error white--text text-h6",
+          },
+          {
+            text: "Σχόλια - Παρατηρήσεις",
+            value: "comment",
+            class: "error white--text text-h6",
+          },
+        ],
+      };
     },
-  },
-};
+    computed: {
+      ...mapState("inspection", ["inspection"]),
+    },
+    mounted() {
+      this.getInspection(this.uuid);
+    },
+    methods: {
+      ...mapActions("inspection", ["getInspection"]),
+      getColor(score) {
+        if (score) {
+          if (score > 100) return "red";
+          else if (score > 40) return "orange";
+          else return "green";
+        }
+      },
+    },
+  };
 </script>
 
 <style></style>
