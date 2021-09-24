@@ -81,6 +81,7 @@
 <script>
   import Footer from "@/components/Footer.vue";
   import Navbar from "@/components/Navbar.vue";
+  import authHeader from "../api/headers";
 
   import http from "../api/axios";
 
@@ -102,6 +103,7 @@
       // ...mapState("inspection", ["inspections"]),
       ...mapState("auth", ["token"]),
     },
+
     created() {
       // this.getInspectionsPaginated(this.page);
       this.getLoads();
@@ -111,7 +113,10 @@
         this.loading = true;
 
         await http
-          .get(`inspections/completed/?page=${this.page}&search=${this.query}`)
+          .get(
+            `inspections/completed/?page=${this.page}&search=${this.query}`,
+            { headers: authHeader() }
+          )
           .then((response) => {
             this.inspections = response.data;
 

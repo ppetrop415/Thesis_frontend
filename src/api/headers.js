@@ -2,7 +2,7 @@ export default function authHeader() {
   let credentials = JSON.parse(localStorage.getItem("credentials"));
 
   if (credentials) {
-    return { Authorization: "Bearer " + credentials.access };
+    return { Authorization: "Token " + credentials.token };
   } else {
     return {};
   }

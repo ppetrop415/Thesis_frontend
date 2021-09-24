@@ -1,5 +1,5 @@
 import http from "@/api/axios";
-import authHeader from "@/api/headers";
+import authHeader from "../api/headers";
 
 const END_POINT = "inspections/";
 

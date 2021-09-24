@@ -123,12 +123,8 @@
       };
     },
     computed: {
-      // ...mapState("branchstore", ["branchstore"]),
       ...mapState("auth", ["token"]),
     },
-    // created() {
-    //   this.getLoads();
-    // },
     methods: {
       ...mapActions("branchstore", ["searchBranchstore"]),
       ...mapActions("inspection", ["createInspection"]),

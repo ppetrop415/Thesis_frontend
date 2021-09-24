@@ -1,7 +1,7 @@
 import axios from "@/api/axios";
 
 import Inspection from "@/services/inspection";
-import Auth from "@/services/auth";
+import Auth from "../services/auth";
 
 export default {
   state: {
@@ -33,10 +33,20 @@ export default {
     },
   },
   actions: {
-    async signIn({ dispatch }, credentials) {
+    async _signIn({ dispatch }, credentials) {
       let response = await axios.post("auth/login/", credentials);
 
       return dispatch("getInspections", response.data);
+    },
+
+    async signIn({ commit }, credentials) {
+      await Auth.login(credentials)
+        .then((response) => {
+          commit("SET_CREDENTIALS", response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
 
     async getInspections({ commit, state }, data) {
