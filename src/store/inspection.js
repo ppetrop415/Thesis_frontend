@@ -25,8 +25,7 @@ export default {
   },
   mutations: {
     SET_INSPECTION: (state, inspection) => (state.inspection = inspection),
-    SET_INSPECTIONS_PAGINATED: (state, inspections) =>
-      (state.inspections = inspections),
+    SET_INSPECTIONS: (state, inspections) => (state.inspections = inspections),
     CREATE_NEW_INSPECTION: (state, inspection) =>
       (state.inspection = inspection),
     ADD_TO_CART: (state, { inspection, question, body, comment }) => {
@@ -89,16 +88,6 @@ export default {
       await Inspection.get(uuid)
         .then((response) => {
           commit("SET_INSPECTION", response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    async searchInspection({ commit }, vat) {
-      await Inspection.findByVat(vat)
-        .then((response) => {
-          commit("SET_INSPECTIONS_PAGINATED", response.data);
         })
         .catch((e) => {
           console.log(e);

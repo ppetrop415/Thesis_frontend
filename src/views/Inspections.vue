@@ -63,7 +63,7 @@
           </v-list-item-group>
         </v-list>
 
-        <div class="text-center my-3">
+        <div v-if="inspections.next" class="text-center my-3">
           <v-pagination
             v-model="page"
             :length="Math.ceil(inspections.count / 10)"

@@ -39,9 +39,4 @@ export default {
       headers: authHeader(),
     });
   },
-  findByVat(vat) {
-    return http.get(`${END_POINT}completed/?search=${vat}`, {
-      headers: authHeader(),
-    });
-  },
 };

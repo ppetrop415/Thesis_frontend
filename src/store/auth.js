@@ -1,11 +1,10 @@
-import axios from "@/api/axios";
+// import axios from "@/api/axios";
 
-import Inspection from "@/services/inspection";
+// import Inspection from "@/services/inspection";
 import Auth from "../services/auth";
 
 export default {
   state: {
-    inspections: null,
     page: 1,
     token: null,
     error: null,
@@ -33,11 +32,11 @@ export default {
     },
   },
   actions: {
-    async _signIn({ dispatch }, credentials) {
-      let response = await axios.post("auth/login/", credentials);
+    // async nosignIn({ dispatch }, credentials) {
+    //   let response = await axios.post("auth/login/", credentials);
 
-      return dispatch("getInspections", response.data);
-    },
+    //   return dispatch("getInspections", response.data);
+    // },
 
     async signIn({ commit }, credentials) {
       await Auth.login(credentials)
@@ -49,22 +48,22 @@ export default {
         });
     },
 
-    async getInspections({ commit, state }, data) {
-      if (data) {
-        commit("SET_CREDENTIALS", data);
-      }
+    // async getInspections({ commit, state }, data) {
+    //   if (data) {
+    //     commit("SET_CREDENTIALS", data);
+    //   }
 
-      if (!state.token) {
-        return;
-      }
+    //   if (!state.token) {
+    //     return;
+    //   }
 
-      try {
-        let response = await Inspection.getAll();
-        commit("SET_INSPECTIONS", response.data);
-      } catch {
-        commit("SET_CREDENTIALS", null);
-      }
-    },
+    //   try {
+    //     let response = await Inspection.getAll();
+    //     commit("SET_INSPECTIONS", response.data);
+    //   } catch {
+    //     commit("SET_CREDENTIALS", null);
+    //   }
+    // },
     signOut({ commit }) {
       return Auth.logout().then(() => {
         commit("SET_CREDENTIALS", null);

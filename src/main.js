@@ -8,8 +8,8 @@ require("@/store/subscriber");
 
 Vue.config.productionTip = false;
 
-store.dispatch(
-  "auth/getInspections",
+store.commit(
+  "auth/SET_CREDENTIALS",
   JSON.parse(localStorage.getItem("credentials"))
 );
 
