@@ -58,53 +58,47 @@
 </template>
 
 <script>
-// import User from "../models/user";
-import { mapActions } from "vuex";
+  // import User from "../models/user";
+  import { mapActions } from "vuex";
 
-export default {
-  name: "Login",
-  data() {
-    return {
-      form: {
-        email: "",
-        password: "",
-      },
-      errors: "",
-      loading: false,
-      showPassword: false,
-      valid: true,
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-      ],
-      passwordRules: [(v) => !!v || "Password is required"],
-    };
-  },
-  methods: {
-    ...mapActions("auth", ["signIn"]),
-    submit() {
-      if (this.$refs.form.validate()) {
-        this.loading = true;
-        this.signIn({
-          email: this.form.email,
-          password: this.form.password,
-        })
-          .then(() => {
-            this.$router.replace({
+  export default {
+    name: "Login",
+    data() {
+      return {
+        form: {
+          email: "",
+          password: "",
+        },
+        errors: "",
+        loading: false,
+        showPassword: false,
+        valid: true,
+        emailRules: [
+          (v) => !!v || "E-mail is required",
+          (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        ],
+        passwordRules: [(v) => !!v || "Password is required"],
+      };
+    },
+    methods: {
+      ...mapActions("auth", ["signIn"]),
+      submit() {
+        if (this.$refs.form.validate()) {
+          this.loading = true;
+          this.signIn({
+            email: this.form.email,
+            password: this.form.password,
+          }).then(() => {
+            this.$router.push({
               name: "inspections",
             });
             this.loading = false;
-          })
-          .catch(() => {
-            this.errors =
-              "Τα στοιχεία εισόδου που καταχωρήσατε δεν είναι σωστά.";
-            this.loading = false;
           });
-      }
+        }
+      },
+      onDismissed() {
+        this.errors = "";
+      },
     },
-    onDismissed() {
-      this.errors = "";
-    },
-  },
-};
+  };
 </script>

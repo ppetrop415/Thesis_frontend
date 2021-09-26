@@ -1,10 +1,9 @@
-// import axios from "@/api/axios";
 import Inspection from "@/services/inspection";
 
 export default {
   state: {
     inspection: null,
-    inspections: null,
+    inspections: [],
     cart: [],
   },
 
@@ -43,10 +42,10 @@ export default {
     CLEAR_INSPECTION: (state) => (state.inspection = null),
   },
   actions: {
-    async getInspectionsPaginated({ commit }, data) {
+    async getInspections({ commit }, data) {
       await Inspection.getAllPaginated(data)
         .then((response) => {
-          commit("SET_INSPECTIONS_PAGINATED", response.data);
+          commit("SET_INSPECTIONS", response.data);
         })
         .catch((e) => {
           console.log(e);

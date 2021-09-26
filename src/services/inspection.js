@@ -4,11 +4,6 @@ import authHeader from "../api/headers";
 const END_POINT = "inspections/";
 
 export default {
-  getAll() {
-    return http.get(`${END_POINT}completed/`, {
-      headers: authHeader(),
-    });
-  },
   getAllPaginated(page, query) {
     return http.get(`${END_POINT}completed/?page=${page}&search=${query}`, {
       headers: authHeader(),

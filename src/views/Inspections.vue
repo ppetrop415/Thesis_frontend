@@ -94,35 +94,28 @@
       return {
         query: "",
         loading: false,
-        inspections: [],
+        // inspections: [],
         selectedItemIndex: -1,
         page: 1,
       };
     },
     computed: {
-      // ...mapState("inspection", ["inspections"]),
+      ...mapState("inspection", ["inspections"]),
       ...mapState("auth", ["token"]),
     },
 
     created() {
-      // this.getInspectionsPaginated(this.page);
       this.getLoads();
     },
     methods: {
       async getLoads() {
-        this.loading = true;
-
         await http
           .get(
             `inspections/completed/?page=${this.page}&search=${this.query}`,
             { headers: authHeader() }
           )
           .then((response) => {
-            this.inspections = response.data;
-
-            console.log(response.data);
-
-            this.loading = false;
+            this.$store.commit("inspection/SET_INSPECTIONS", response.data);
           });
       },
 
