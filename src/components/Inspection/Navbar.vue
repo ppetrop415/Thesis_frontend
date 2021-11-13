@@ -25,32 +25,32 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
-export default {
-  data() {
-    return {
-      drawer: false,
-      disabled: null,
-    };
-  },
-  computed: {
-    ...mapGetters("inspection", ["answerTotalScore", "totalAnswers"]),
-    ...mapGetters("branchstore", ["totalQuestions"]),
-    ...mapState("inspection", ["inspection"]),
-  },
-  methods: {
-    ...mapActions("inspection", ["completeInspection"]),
-    submitInspection() {
-      this.completeInspection({
-        score: this.answerTotalScore,
-        inspection: this.inspection.uuid,
-      });
-      this.$router.push({
-        name: "inspections",
-      });
+  import { mapActions, mapGetters, mapState } from "vuex";
+  export default {
+    data() {
+      return {
+        drawer: false,
+        disabled: null,
+      };
     },
-  },
-};
+    computed: {
+      ...mapGetters("inspection", ["answerTotalScore", "totalAnswers"]),
+      ...mapGetters("branchstore", ["totalQuestions"]),
+      ...mapState("inspection", ["inspection"]),
+    },
+    methods: {
+      ...mapActions("inspection", ["completeInspection"]),
+      submitInspection() {
+        this.completeInspection({
+          score: this.answerTotalScore,
+          inspection: this.inspection.uuid,
+        });
+        this.$router.push({
+          name: "inspections",
+        });
+      },
+    },
+  };
 </script>
 
 <style></style>

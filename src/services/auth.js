@@ -2,7 +2,7 @@ import http from "../api/axios";
 // import logoutHeader from "@/api/headersLogout";
 // import authHeader from "@/api/headers";
 
-const END_POINT = "auth/";
+const END_POINT = "api/";
 
 export default {
   login(data) {

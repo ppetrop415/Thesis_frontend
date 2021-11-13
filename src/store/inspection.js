@@ -42,8 +42,8 @@ export default {
     CLEAR_INSPECTION: (state) => (state.inspection = null),
   },
   actions: {
-    async getInspections({ commit }, data) {
-      await Inspection.getAllPaginated(data)
+    async getInspections({ commit }, { page, query }) {
+      await Inspection.getAllPaginated(page, query)
         .then((response) => {
           commit("SET_INSPECTIONS", response.data);
         })

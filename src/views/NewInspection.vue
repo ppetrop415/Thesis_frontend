@@ -166,7 +166,6 @@
       startInspection() {
         this.createInspection({
           branch_store: this.selectedBranchstore.id,
-          inspector: this.token.user.id,
         });
         this.$router.push({
           name: "inspection",
